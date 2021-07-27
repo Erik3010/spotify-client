@@ -6,6 +6,12 @@ interface Album {
   items: AlbumItem[];
 }
 
+interface Artist {
+  id: string;
+  name: string;
+  href: string;
+}
+
 interface AlbumItem {
   album_type: string;
   href: string;
@@ -15,4 +21,5 @@ interface AlbumItem {
   release_date: string;
   type: string;
   uri: string;
+  artists: Artist[];
 }

@@ -1,14 +1,24 @@
 class Badge implements Renderable {
   container: HTMLInputElement;
+  artist: Artist;
 
-  constructor({ container }: { container: HTMLInputElement }) {
+  constructor({
+    container,
+    artist,
+  }: {
+    container: HTMLInputElement;
+    artist: Artist;
+  }) {
     this.container = container;
+    this.artist = artist;
   }
-  html(item: any): string {
+  html(item: any = null): string {
     return `
-      <div class="bg-gray-700 inline py-1 px-3 rounded-sm text-xs cursor-pointer hover:bg-gray-800">Nama 123</div>
+      <div class="bg-gray-700 inline py-1 px-3 mr-1 mt-1 rounded-sm text-xs cursor-pointer hover:bg-gray-800">${this.artist.name}</div>
     `;
   }
-  render(): void {}
+  render(): void {
+    this.container.insertAdjacentHTML("beforeend", this.html());
+  }
   mounted(): void {}
 }

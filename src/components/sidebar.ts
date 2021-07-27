@@ -1,5 +1,18 @@
 class Sidebar implements Renderable {
   container: HTMLInputElement;
+  _album: SidebarAlbum = {
+    title: "",
+    cover: "",
+    releaseDate: "",
+    artists: [],
+  };
+  _sidebarSelector: Record<keyof SidebarAlbum, any> = {
+    title: "sidebar-title",
+    cover: "sidebar-cover",
+    releaseDate: "sidebar-release-date",
+    artists: "sidebar-artists",
+  };
+
   constructor({ container }: { container: HTMLInputElement }) {
     this.container = container;
   }
@@ -10,8 +23,8 @@ class Sidebar implements Renderable {
         <div
           class="flex justify-between w-full h-48 bg-gradient-to-b from-gray-600 to-gray-800 pl-9 pr-6 items-end py-4">
           <div class="w-32 h-32 shadow-3xl bg-gray-600 transform translate-y-1/2">
-            <img src="https://images.unsplash.com/photo-1514924013411-cbf25faa35bb?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=336&q=80"
-              alt="" class="w-full h-full object-cover" id="sidebar-cover">
+            <img src="${this._album.cover}"
+              alt="${this._album.title}" class="w-full h-full object-cover" id="${this._sidebarSelector.cover}">
           </div>
           <div class="flex flex-col justify-between h-full items-center">
             <div class="cursor-pointer p-2 rounded-md" id="sidebar-button-close">
@@ -34,15 +47,15 @@ class Sidebar implements Renderable {
         <div class="px-9 mt-16">
           <div class="pt-1">
             <p class="font-medium text-sm text-gray-200">Album</p>
-            <h1 class="text-3xl font-bold" id="sidebar-title">Power of the Dream</h1>
+            <h1 class="text-3xl font-bold" id="${this._sidebarSelector.title}">${this._album.title}</h1>
           </div>
           <div class="leading-6 text-gray-300 text-sm mt-4">
             <div>Release Date:</div>
-            <div class="text-base font-medium" id="sidebar-release-date"></div>
+            <div class="text-base font-medium" id="${this._sidebarSelector.releaseDate}">${this._album.releaseDate}</div>
           </div>
           <div class="leading-6 text-gray-300 text-sm mt-4">
             <div>Artists:</div>
-            <div class="text-base font-medium mt-1" id="sidebar-artists"></div>
+            <div class="text-base font-medium mt-1 flex flex-wrap" id="${this._sidebarSelector.artists}"></div>
           </div>
         </div>
       </div>
@@ -52,10 +65,10 @@ class Sidebar implements Renderable {
     this.container.insertAdjacentHTML("beforeend", this.html());
   }
   mounted() {
+    const sidebar = <HTMLInputElement>document.querySelector("#sidebar");
     const closeButton = <HTMLInputElement>(
       document.querySelector("#sidebar-button-close")
     );
-    const sidebar = <HTMLInputElement>document.querySelector("#sidebar");
     const mainContent = <HTMLInputElement>(
       document.querySelector("#main-content")
     );
@@ -65,6 +78,34 @@ class Sidebar implements Renderable {
       Utility.modifyClass("remove", sidebar, ["translate-x-0"]);
 
       Utility.modifyClass("add", sidebar, ["translate-x-full"]);
+    });
+  }
+  set album(album: SidebarAlbum) {
+    this._album = album;
+    this.render();
+
+    const sidebarCover = <HTMLInputElement>(
+      document.querySelector(`#${this._sidebarSelector.cover}`)
+    );
+    sidebarCover.src = this._album.cover;
+    sidebarCover.alt = this._album.title;
+
+    document.querySelector(`#${this._sidebarSelector.title}`)!.innerHTML =
+      this._album.title;
+
+    document.querySelector(`#${this._sidebarSelector.releaseDate}`)!.innerHTML =
+      this._album.releaseDate;
+
+    const artistContainer = <HTMLInputElement>(
+      document.querySelector(`#${this._sidebarSelector.artists}`)
+    );
+    artistContainer.innerHTML = "";
+    this._album.artists.forEach((artist) => {
+      const badge = new Badge({
+        container: artistContainer,
+        artist: artist,
+      });
+      badge.render();
     });
   }
 }

@@ -60,17 +60,17 @@ class NewReleaseCard implements Renderable {
     const sidebar = <HTMLInputElement>document.querySelector("#sidebar");
     const cards = <NodeListOf<Element>>document.querySelectorAll(".song-card");
 
-    const sidebarItem = {
-      cover: <HTMLInputElement>(
-        document.querySelector(this.sidebarSelector.cover)
-      ),
-      title: <HTMLInputElement>(
-        document.querySelector(this.sidebarSelector.title)
-      ),
-      releaseDate: <HTMLInputElement>(
-        document.querySelector(this.sidebarSelector.releaseDate)
-      ),
-    };
+    // const sidebarItem = {
+    //   cover: <HTMLInputElement>(
+    //     document.querySelector(this.sidebarSelector.cover)
+    //   ),
+    //   title: <HTMLInputElement>(
+    //     document.querySelector(this.sidebarSelector.title)
+    //   ),
+    //   releaseDate: <HTMLInputElement>(
+    //     document.querySelector(this.sidebarSelector.releaseDate)
+    //   ),
+    // };
 
     for (let card of <any>cards) {
       card.addEventListener("click", () => {
@@ -84,13 +84,20 @@ class NewReleaseCard implements Renderable {
         );
 
         const id = card.dataset.id;
-        const album = this.albums.albums.items.find((item) => item.id === id);
+        const album = this.albums.albums.items.find((item) => item.id === id)!;
 
-        sidebarItem.cover.src = album?.images[0].url!;
-        sidebarItem.title.innerHTML = album?.name!;
-        sidebarItem.releaseDate.innerHTML = Utility.dateFormat(
-          album?.release_date!
-        );
+        this.sidebar.album = {
+          title: album.name,
+          cover: album.images[0].url,
+          releaseDate: album.release_date,
+          artists: album.artists,
+        };
+
+        // sidebarItem.cover.src = album?.images[0].url!;
+        // sidebarItem.title.innerHTML = album?.name!;
+        // sidebarItem.releaseDate.innerHTML = Utility.dateFormat(
+        //   album?.release_date!
+        // );
       });
     }
   }
