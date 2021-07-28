@@ -4,6 +4,7 @@ interface NewReleaseAlbumResponse {
 
 interface Album {
   items: AlbumItem[];
+  total: number;
 }
 
 interface Artist {

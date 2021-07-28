@@ -1,13 +1,8 @@
 class SpotifyService {
-  clientId: string;
-  clientSecret: string;
+  clientId: string = "b6fec45e2e674f43a79579a66f57d262";
+  clientSecret: string = "570e51197e5644e0ac042dd0f2ed3f1a";
   token: string | null = null;
   limit: number = 10;
-
-  constructor({ clientId, clientSecret }: SpotifyInterface) {
-    this.clientId = clientId;
-    this.clientSecret = clientSecret;
-  }
 
   async init() {
     this.token = (await this.getToken()).access_token;

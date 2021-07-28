@@ -33,7 +33,7 @@ class NewReleaseCard implements Renderable {
               class="w-full h-full object-cover transition transform hover:scale-110 cursor-pointer">
           </div>
           <div class="mt-4">
-            <a href="#" class="font-bold text-xl hover:underline">${
+            <a href="#search" class="font-bold text-xl hover:underline">${
               albumItem.name
             }</a>
             <p class="text-sm text-gray-400 mt-1">${Utility.dateFormat(
@@ -62,7 +62,8 @@ class NewReleaseCard implements Renderable {
     const cards = <NodeListOf<Element>>document.querySelectorAll(".song-card");
 
     for (let card of <any>cards) {
-      card.addEventListener("click", () => {
+      const cardCover = card.querySelector("img");
+      cardCover.addEventListener("click", () => {
         Utility.modifyClass("remove", sidebar, ["translate-x-full"]);
 
         Utility.modifyClass("add", sidebar, ["translate-x-0"]);

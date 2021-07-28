@@ -4,6 +4,7 @@ class UI {
     mainWrapper: "#main-wrapper",
     mainContent: "#main-content",
     loadingContainer: "#infinite-loading-container",
+    mainSection: "#main-section",
   };
   sidebar!: Sidebar;
   circularLoading!: CircularLoading;
@@ -51,14 +52,14 @@ class UI {
   }
 
   async scrollHandler() {
-    const mainContent = <HTMLElement>(
-      document.querySelector(`${this.elementSelector.mainContent}`)
+    const mainSection = <HTMLElement>(
+      document.querySelector(`${this.elementSelector.mainSection}`)
     );
 
     const paddingBottom = 20;
 
     const currentPosition = window.scrollY + window.innerHeight;
-    const totalHeight = mainContent.scrollHeight - paddingBottom;
+    const totalHeight = mainSection.scrollHeight - paddingBottom;
 
     if (currentPosition >= totalHeight && !this.isLoadingNewRelease) {
       this.circularLoading.render();
@@ -66,7 +67,7 @@ class UI {
       app.page++;
 
       this.isLoadingNewRelease = true;
-      await app.displayNewReleaseAlbum();
+      // await app.displayNewReleaseAlbum();
       this.isLoadingNewRelease = false;
 
       this.circularLoading.destroy();

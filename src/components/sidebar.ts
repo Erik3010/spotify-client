@@ -13,6 +13,8 @@ class Sidebar implements Renderable {
     artists: "sidebar-artists",
   };
 
+  closeSidebar = this._closeSidebar.bind(this);
+
   constructor({ container }: { container: HTMLElement }) {
     this.container = container;
   }
@@ -65,18 +67,20 @@ class Sidebar implements Renderable {
     this.container.insertAdjacentHTML("beforeend", this.html());
   }
   mounted() {
-    const sidebar = <HTMLElement>document.querySelector("#sidebar");
     const closeButton = <HTMLElement>(
       document.querySelector("#sidebar-button-close")
     );
+
+    closeButton.addEventListener("click", this.closeSidebar);
+  }
+  _closeSidebar() {
+    const sidebar = <HTMLElement>document.querySelector("#sidebar");
     const mainContent = <HTMLElement>document.querySelector("#main-content");
 
-    closeButton.addEventListener("click", () => {
-      Utility.modifyClass("remove", mainContent, ["md:mr-96"]);
-      Utility.modifyClass("remove", sidebar, ["translate-x-0"]);
+    Utility.modifyClass("remove", mainContent, ["md:mr-96"]);
+    Utility.modifyClass("remove", sidebar, ["translate-x-0"]);
 
-      Utility.modifyClass("add", sidebar, ["translate-x-full"]);
-    });
+    Utility.modifyClass("add", sidebar, ["translate-x-full"]);
   }
   set album(album: SidebarAlbum) {
     this._album = album;

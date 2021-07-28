@@ -1,0 +1,3 @@
+interface Unmountable {
+  unmount(): void;
+}
