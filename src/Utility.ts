@@ -8,7 +8,7 @@ class Utility {
   }
   static modifyClass(
     action: "add" | "remove",
-    element: HTMLInputElement,
+    element: HTMLElement,
     classes: string[]
   ) {
     classes.forEach((cls) => element.classList[action](cls));

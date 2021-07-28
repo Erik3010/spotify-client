@@ -1,12 +1,12 @@
 class Badge implements Renderable {
-  container: HTMLInputElement;
+  container: HTMLElement;
   artist: Artist;
 
   constructor({
     container,
     artist,
   }: {
-    container: HTMLInputElement;
+    container: HTMLElement;
     artist: Artist;
   }) {
     this.container = container;

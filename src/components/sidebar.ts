@@ -1,5 +1,5 @@
 class Sidebar implements Renderable {
-  container: HTMLInputElement;
+  container: HTMLElement;
   _album: SidebarAlbum = {
     title: "",
     cover: "",
@@ -13,7 +13,7 @@ class Sidebar implements Renderable {
     artists: "sidebar-artists",
   };
 
-  constructor({ container }: { container: HTMLInputElement }) {
+  constructor({ container }: { container: HTMLElement }) {
     this.container = container;
   }
   html(item: any = null): string {
@@ -65,13 +65,11 @@ class Sidebar implements Renderable {
     this.container.insertAdjacentHTML("beforeend", this.html());
   }
   mounted() {
-    const sidebar = <HTMLInputElement>document.querySelector("#sidebar");
-    const closeButton = <HTMLInputElement>(
+    const sidebar = <HTMLElement>document.querySelector("#sidebar");
+    const closeButton = <HTMLElement>(
       document.querySelector("#sidebar-button-close")
     );
-    const mainContent = <HTMLInputElement>(
-      document.querySelector("#main-content")
-    );
+    const mainContent = <HTMLElement>document.querySelector("#main-content");
 
     closeButton.addEventListener("click", () => {
       Utility.modifyClass("remove", mainContent, ["md:mr-96"]);
@@ -84,8 +82,8 @@ class Sidebar implements Renderable {
     this._album = album;
     this.render();
 
-    const sidebarCover = <HTMLInputElement>(
-      document.querySelector(`#${this._sidebarSelector.cover}`)
+    const sidebarCover = <HTMLImageElement>(
+      document.querySelector(`#${this._sidebarSelector.cover}`)!
     );
     sidebarCover.src = this._album.cover;
     sidebarCover.alt = this._album.title;
@@ -96,7 +94,7 @@ class Sidebar implements Renderable {
     document.querySelector(`#${this._sidebarSelector.releaseDate}`)!.innerHTML =
       this._album.releaseDate;
 
-    const artistContainer = <HTMLInputElement>(
+    const artistContainer = <HTMLElement>(
       document.querySelector(`#${this._sidebarSelector.artists}`)
     );
     artistContainer.innerHTML = "";

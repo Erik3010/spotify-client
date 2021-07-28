@@ -1,6 +1,6 @@
 class NewReleaseCard implements Renderable {
   albums: NewReleaseAlbumResponse;
-  container: HTMLInputElement;
+  container: HTMLElement;
   sidebar: Sidebar;
   sidebarSelector: Record<string, string> = {
     cover: "#sidebar-cover",
@@ -13,7 +13,7 @@ class NewReleaseCard implements Renderable {
     albums,
     sidebar,
   }: {
-    container: HTMLInputElement;
+    container: HTMLElement;
     albums: NewReleaseAlbumResponse;
     sidebar: Sidebar;
   }) {
@@ -52,25 +52,14 @@ class NewReleaseCard implements Renderable {
     `;
   }
   async render() {
-    this.container.innerHTML = this.albums.albums.items
-      .map((item) => this.html(item))
-      .join("");
+    this.container.insertAdjacentHTML(
+      "beforeend",
+      this.albums.albums.items.map((item) => this.html(item)).join("")
+    );
   }
   async mounted() {
-    const sidebar = <HTMLInputElement>document.querySelector("#sidebar");
+    const sidebar = <HTMLElement>document.querySelector("#sidebar");
     const cards = <NodeListOf<Element>>document.querySelectorAll(".song-card");
-
-    // const sidebarItem = {
-    //   cover: <HTMLInputElement>(
-    //     document.querySelector(this.sidebarSelector.cover)
-    //   ),
-    //   title: <HTMLInputElement>(
-    //     document.querySelector(this.sidebarSelector.title)
-    //   ),
-    //   releaseDate: <HTMLInputElement>(
-    //     document.querySelector(this.sidebarSelector.releaseDate)
-    //   ),
-    // };
 
     for (let card of <any>cards) {
       card.addEventListener("click", () => {
@@ -79,7 +68,7 @@ class NewReleaseCard implements Renderable {
         Utility.modifyClass("add", sidebar, ["translate-x-0"]);
         Utility.modifyClass(
           "add",
-          <HTMLInputElement>document.querySelector("#main-content"),
+          <HTMLElement>document.querySelector("#main-content"),
           ["md:mr-96"]
         );
 
@@ -92,12 +81,6 @@ class NewReleaseCard implements Renderable {
           releaseDate: album.release_date,
           artists: album.artists,
         };
-
-        // sidebarItem.cover.src = album?.images[0].url!;
-        // sidebarItem.title.innerHTML = album?.name!;
-        // sidebarItem.releaseDate.innerHTML = Utility.dateFormat(
-        //   album?.release_date!
-        // );
       });
     }
   }

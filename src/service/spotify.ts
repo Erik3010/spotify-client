@@ -2,6 +2,7 @@ class SpotifyService {
   clientId: string;
   clientSecret: string;
   token: string | null = null;
+  limit: number = 10;
 
   constructor({ clientId, clientSecret }: SpotifyInterface) {
     this.clientId = clientId;
@@ -31,9 +32,11 @@ class SpotifyService {
     return data;
   }
 
-  async getNewRelease(): Promise<NewReleaseAlbumResponse> {
+  async getNewRelease(page: number = 1): Promise<NewReleaseAlbumResponse> {
+    const offset = (page - 1) * this.limit;
+
     const result = await fetch(
-      "https://api.spotify.com/v1/browse/new-releases",
+      `https://api.spotify.com/v1/browse/new-releases?offset=${offset}&limit=${this.limit}`,
       {
         method: "GET",
         headers: {
