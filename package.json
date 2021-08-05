@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tailwindcss-cli@latest build ./css/tailwind.css -o ./css/style.css",
-    "purge": "npx tailwindcss-cli@latest build ./css/tailwind.css -o ./dist/css/style.css"
+    "purge": "npx tailwindcss-cli@latest build ./css/tailwind.css -o ./css/build.css"
   },
   "keywords": [],
   "author": "",
