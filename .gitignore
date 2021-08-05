@@ -1,5 +1,4 @@
 node_modules/
 dist/
 build/
-css/style.css
-css/tailwind.css
+css/
