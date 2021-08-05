@@ -1,15 +1,21 @@
 class SpotifyService {
   clientId: string = CONFIG.CLIENT_ID;
   clientSecret: string = CONFIG.CLIENT_SECRET;
-  token: string | null = null;
+  token!: SpotifyTokenResponse;
   limit: number = 10;
 
   async init() {
-    const localToken = localStorage.getItem(CONFIG.TOKEN_LOCAL_KEY);
+    this.token =
+      JSON.parse(localStorage.getItem(CONFIG.SPOTIFY_AUTH_TOKEN)!) || {};
 
-    if (!!localToken) this.token = localToken;
-    else {
-      this.token = (await this.getToken()).access_token;
+    if (
+      !this.token?.access_token ||
+      Date.now() > (this.token?.expired_at! ?? 0)
+    ) {
+      const tokenResult = await this.getToken();
+
+      this.token = tokenResult;
+
       this._cacheToken();
     }
   }
@@ -20,7 +26,7 @@ class SpotifyService {
 
   _getBearerTokenHeader() {
     return {
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${this.token?.access_token}`,
     };
   }
 
@@ -76,6 +82,12 @@ class SpotifyService {
   }
 
   _cacheToken() {
-    localStorage.setItem(CONFIG.TOKEN_LOCAL_KEY, this.token!);
+    localStorage.setItem(
+      CONFIG.SPOTIFY_AUTH_TOKEN,
+      JSON.stringify({
+        ...this.token,
+        expired_at: Date.now() + this.token.expires_in * 1000,
+      })
+    );
   }
 }
