@@ -18,7 +18,7 @@ class Sidebar implements Renderable {
   constructor({ container }: { container: HTMLElement }) {
     this.container = container;
   }
-  html(item: any = null): string {
+  html(): string {
     return `
       <div id="sidebar"
         class="fixed bg-gray-900 shadow-3xl text-white inset-y-0 right-0 w-full md:w-96 transform transition duration-300 ease-in-out translate-x-full">

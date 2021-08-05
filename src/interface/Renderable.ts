@@ -1,5 +1,5 @@
 interface Renderable {
-  html(item: any): string;
+  html(): string;
   render(): void;
   mounted(): void;
 }

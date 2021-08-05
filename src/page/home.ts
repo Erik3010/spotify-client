@@ -14,7 +14,7 @@ class Home implements Renderable, Unmountable {
 
   scrollHandler = this._scrollHandler.bind(this);
 
-  html(item: any = null): string {
+  html(): string {
     return `
       <!-- section title -->
       <header class="flex justify-between items-center">

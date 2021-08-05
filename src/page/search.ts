@@ -5,7 +5,7 @@ class Search implements Renderable, Unmountable {
     songListContainer: "#song-list-container",
   };
 
-  html(item: any = null): string {
+  html(): string {
     return `
       <!-- section title -->
       <header class="flex justify-between items-center">

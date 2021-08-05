@@ -23,14 +23,16 @@ class UI {
       document.querySelector(this.elementSelector.songContainer)!
     );
 
-    const CardComponent = new NewReleaseCard({
-      container,
-      albums: newRelease,
-      sidebar: this.sidebar,
-    });
+    newRelease.albums.items.forEach(async (album) => {
+      const CardComponent = new NewReleaseCard({
+        container,
+        sidebar: this.sidebar,
+        album,
+      });
 
-    await CardComponent.render();
-    await CardComponent.mounted();
+      await CardComponent.render();
+      await CardComponent.mounted();
+    });
   }
 
   initSearchInput() {

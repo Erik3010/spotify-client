@@ -4,7 +4,7 @@ class EmptySearch implements Renderable {
   constructor({ container }: { container: HTMLElement }) {
     this.container = container;
   }
-  html(item: any = null): string {
+  html(): string {
     return `
       <div class="text-center flex flex-col h-full mt-20">
         <h1 class="text-2xl font-bold mb-2">Sorry 😟</h1>

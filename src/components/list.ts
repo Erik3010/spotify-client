@@ -12,7 +12,7 @@ class List implements Renderable {
     this.album = album;
     this.container = container;
   }
-  html(item: any = null): string {
+  html(): string {
     return `
       <div class="song-list flex py-4">
         <img class="flex-none w-18 h-18 rounded-lg object-cover"

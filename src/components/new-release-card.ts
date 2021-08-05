@@ -1,5 +1,4 @@
 class NewReleaseCard implements Renderable {
-  albums: NewReleaseAlbumResponse;
   container: HTMLElement;
   sidebar: Sidebar;
   sidebarSelector: Record<string, string> = {
@@ -7,37 +6,38 @@ class NewReleaseCard implements Renderable {
     title: "#sidebar-title",
     releaseDate: "#sidebar-release-date",
   };
+  album: AlbumItem;
 
   constructor({
     container,
-    albums,
     sidebar,
+    album,
   }: {
     container: HTMLElement;
-    albums: NewReleaseAlbumResponse;
     sidebar: Sidebar;
+    album: AlbumItem;
   }) {
-    this.albums = albums;
     this.container = container;
     this.sidebar = sidebar;
+    this.album = album;
   }
-  html(albumItem: AlbumItem): string {
+  html(item = null): string {
     return `
-      <article class="song-card rounded-xl bg-gray-700 p-5 w-full song-card" data-id="${
-        albumItem.id
-      }">
+      <article id="album-${
+        this.album.id
+      }" class="song-card rounded-xl bg-gray-700 p-5 w-full song-card">
         <div class="relative">
           <div class="h-48 overflow-hidden rounded-lg">
-            <img src="${albumItem.images[0].url}"
+            <img src="${this.album.images[0].url}"
               alt="Cover"
               class="w-full h-full object-cover transition transform hover:scale-110 cursor-pointer">
           </div>
           <div class="mt-4">
             <a class="font-bold text-xl hover:underline cursor-pointer">${
-              albumItem.name
+              this.album.name
             }</a>
             <p class="text-sm text-gray-400 mt-1">${Utility.dateFormat(
-              albumItem.release_date
+              this.album.release_date
             )}</p>
           </div>
           <div
@@ -52,14 +52,13 @@ class NewReleaseCard implements Renderable {
     `;
   }
   async render() {
-    this.container.insertAdjacentHTML(
-      "beforeend",
-      this.albums.albums.items.map((item) => this.html(item)).join("")
-    );
+    this.container.insertAdjacentHTML("beforeend", this.html());
   }
   async mounted() {
     const sidebar = <HTMLElement>document.querySelector("#sidebar");
-    const cards = <NodeListOf<Element>>document.querySelectorAll(".song-card");
+    const cards = <NodeListOf<Element>>(
+      document.querySelectorAll(`#album-${this.album.id}`)
+    );
 
     for (let card of <any>cards) {
       const cardCover = card.querySelector("img");
@@ -73,14 +72,11 @@ class NewReleaseCard implements Renderable {
           ["md:mr-96"]
         );
 
-        const id = card.dataset.id;
-        const album = this.albums.albums.items.find((item) => item.id === id)!;
-
         this.sidebar.album = {
-          title: album.name,
-          cover: album.images[0].url,
-          releaseDate: album.release_date,
-          artists: album.artists,
+          title: this.album.name,
+          cover: this.album.images[0].url,
+          releaseDate: this.album.release_date,
+          artists: this.album.artists,
         };
       });
     }

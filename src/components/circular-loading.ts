@@ -4,7 +4,7 @@ class CircularLoading implements Renderable {
   constructor({ container }: { container: HTMLElement }) {
     this.container = container;
   }
-  html(item: any = null): string {
+  html(): string {
     return `
     <svg class="animate-spin -ml-1 mr-3 h-7 w-7 text-white" xmlns="http://www.w3.org/2000/svg"
       fill="none" viewBox="0 0 24 24">
