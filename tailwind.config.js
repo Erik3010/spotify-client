@@ -3,7 +3,7 @@ const colors = require("tailwindcss/colors");
 module.exports = {
   purge: {
     enabled: true,
-    content: ["./css/**/*.css", "./index.html"],
+    content: ["./css/**/*.css", "./index.html", "./src/**/*.ts", "./src/*.ts"],
   },
   darkMode: false, // or 'media' or 'class'
   theme: {
@@ -17,8 +17,8 @@ module.exports = {
         width: "width",
       },
       boxShadow: {
-        "3xl": "0 40px 55px -15px rgb(0, 0, 0, 0.5)"
-      }
+        "3xl": "0 40px 55px -15px rgb(0, 0, 0, 0.5)",
+      },
     },
   },
   variants: {
