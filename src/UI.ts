@@ -2,14 +2,10 @@ class UI {
   elementSelector: Record<string, string> = {
     songContainer: "#song-list-container",
     mainWrapper: "#main-wrapper",
-    mainContent: "#main-content",
-    loadingContainer: "#infinite-loading-container",
-    mainSection: "#main-section",
+    searchInput: "#search-input",
+    searchIcon: "#search-icon",
   };
   sidebar!: Sidebar;
-  circularLoading!: CircularLoading;
-  isLoadingNewRelease: boolean = false;
-  scrollHandlerFn = this.scrollHandler.bind(this);
 
   async createSidebar() {
     const container = <HTMLElement>(
@@ -37,40 +33,43 @@ class UI {
     await CardComponent.mounted();
   }
 
-  initInfiniteLoad() {
-    this.circularLoading = new CircularLoading({
-      container: document.querySelector(
-        `${this.elementSelector.loadingContainer}`
-      )!,
-    });
-
-    window.addEventListener("scroll", this.scrollHandlerFn);
-  }
-
-  removeInfiniteLoad() {
-    window.removeEventListener("scroll", this.scrollHandlerFn);
-  }
-
-  async scrollHandler() {
-    const mainSection = <HTMLElement>(
-      document.querySelector(`${this.elementSelector.mainSection}`)
+  initSearchInput() {
+    const searchInput = <HTMLElement>(
+      document.querySelector(`${this.elementSelector.searchInput}`)
+    );
+    const searchIcon = <HTMLElement>(
+      document.querySelector(`${this.elementSelector.searchIcon}`)
     );
 
-    const paddingBottom = 20;
+    searchInput.addEventListener("transitionend", (e) => {
+      const target = <HTMLInputElement>e.target;
 
-    const currentPosition = window.scrollY + window.innerHeight;
-    const totalHeight = mainSection.scrollHeight - paddingBottom;
+      if (target.classList.contains("translate-x-full")) return;
+      target.focus();
+    });
 
-    if (currentPosition >= totalHeight && !this.isLoadingNewRelease) {
-      this.circularLoading.render();
+    searchIcon.addEventListener("click", () => {
+      Utility.modifyClass("remove", searchInput, ["translate-x-full"]);
+      Utility.modifyClass("remove", searchIcon, ["rounded-lg"]);
 
-      app.page++;
+      Utility.modifyClass("add", searchInput, ["translate-x-0"]);
+    });
 
-      this.isLoadingNewRelease = true;
-      // await app.displayNewReleaseAlbum();
-      this.isLoadingNewRelease = false;
+    searchInput.addEventListener("blur", () => {
+      Utility.modifyClass("add", searchInput, ["translate-x-full"]);
+      Utility.modifyClass("add", searchIcon, ["rounded-lg"]);
 
-      this.circularLoading.destroy();
-    }
+      Utility.modifyClass("remove", searchInput, ["translate-x-0"]);
+    });
+
+    searchInput.addEventListener("keydown", async (e) => {
+      if (e.keyCode === 13) {
+        if (window.location.hash.substring(1) === "search") {
+          await app.router.renderPage();
+        } else {
+          window.location.href = `#search`;
+        }
+      }
+    });
   }
 }

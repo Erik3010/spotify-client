@@ -1,15 +1,27 @@
 class SpotifyService {
-  clientId: string = "b6fec45e2e674f43a79579a66f57d262";
-  clientSecret: string = "570e51197e5644e0ac042dd0f2ed3f1a";
+  clientId: string = CONFIG.CLIENT_ID;
+  clientSecret: string = CONFIG.CLIENT_SECRET;
   token: string | null = null;
   limit: number = 10;
 
   async init() {
-    this.token = (await this.getToken()).access_token;
+    const localToken = localStorage.getItem(CONFIG.TOKEN_LOCAL_KEY);
+
+    if (!!localToken) this.token = localToken;
+    else {
+      this.token = (await this.getToken()).access_token;
+      this._cacheToken();
+    }
   }
 
   _getAuthorizationHeader() {
     return btoa(`${this.clientId}:${this.clientSecret}`);
+  }
+
+  _getBearerTokenHeader() {
+    return {
+      Authorization: `Bearer ${this.token}`,
+    };
   }
 
   async getToken(): Promise<SpotifyTokenResponse> {
@@ -31,17 +43,39 @@ class SpotifyService {
     const offset = (page - 1) * this.limit;
 
     const result = await fetch(
-      `https://api.spotify.com/v1/browse/new-releases?offset=${offset}&limit=${this.limit}`,
+      `${CONFIG.API_BASE_URL}/browse/new-releases?offset=${offset}&limit=${this.limit}`,
       {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-        },
+        headers: this._getBearerTokenHeader(),
       }
     );
 
     const data = await result.json();
 
     return data;
+  }
+
+  async searchAlbum({
+    query,
+  }: {
+    query: string;
+  }): Promise<NewReleaseAlbumResponse> {
+    const params = new URLSearchParams({
+      query,
+      type: "album",
+    }).toString();
+
+    const result = await fetch(`${CONFIG.API_BASE_URL}/search?${params}`, {
+      method: "GET",
+      headers: this._getBearerTokenHeader(),
+    });
+
+    const data = await result.json();
+
+    return data;
+  }
+
+  _cacheToken() {
+    localStorage.setItem(CONFIG.TOKEN_LOCAL_KEY, this.token!);
   }
 }

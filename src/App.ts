@@ -27,43 +27,16 @@ class App {
   }
 
   async initApp() {
+    this.initSearchInput();
+
     await this.initRoute();
-
-    // this.createHomePage();
   }
-
-  async createHomePage() {
-    // const homePage = new Home({
-    //   container: document.querySelector("#main-section")!,
-    // });
-    // homePage.render();
-    // //TODO: generate sidebar
-    // this.displaySidebar();
-    // //TODO: generate new release album
-    // await this.displayNewReleaseAlbum();
-    // this.UI.initInfiniteLoad();
-  }
-
-  // async createSearchPage() {
-  //   alert("tes");
-  // }
-
-  // async displayNewReleaseAlbum() {
-  //   const newRelease = await this.spotify.getNewRelease(this.page);
-
-  //   if (!newRelease.albums.items.length) {
-  //     this.UI.removeInfiniteLoad();
-  //     return;
-  //   }
-
-  //   this.UI.createNewReleaseAlbum(newRelease);
-  // }
-
-  // displaySidebar() {
-  //   this.UI.createSidebar();
-  // }
 
   initRoute() {
     this.router.init();
+  }
+
+  initSearchInput() {
+    this.UI.initSearchInput();
   }
 }

@@ -33,7 +33,7 @@ class NewReleaseCard implements Renderable {
               class="w-full h-full object-cover transition transform hover:scale-110 cursor-pointer">
           </div>
           <div class="mt-4">
-            <a href="#search" class="font-bold text-xl hover:underline">${
+            <a class="font-bold text-xl hover:underline cursor-pointer">${
               albumItem.name
             }</a>
             <p class="text-sm text-gray-400 mt-1">${Utility.dateFormat(

@@ -2,6 +2,7 @@ class Router {
   urlParser: UrlParser = new UrlParser();
   container: HTMLElement;
   routes: Route[];
+  currentPage!: Route;
 
   lastRoute!: Route;
 
@@ -25,11 +26,15 @@ class Router {
 
     const path = UrlParser.getCurrentRoutePath();
 
-    const currentPage = this.routes.find((route) => route.url === path)!;
+    this.currentPage = this.routes.find((route) => route.url === path)!;
+    document.title = this.currentPage.title;
 
-    this.lastRoute = currentPage;
+    this.lastRoute = this.currentPage;
 
-    await currentPage.pageComponent.render();
-    await currentPage.pageComponent.mounted();
+    await this.renderPage();
+  }
+  async renderPage() {
+    await this.currentPage.pageComponent.render();
+    await this.currentPage.pageComponent.mounted();
   }
 }
